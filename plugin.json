@@ -1,0 +1,12 @@
+{
+  "id": "cmfController",
+  "name": "CMF Buds Pro",
+  "description": "Control ANC modes for CMF Buds Pro 2",
+  "version": "1.0.0",
+  "author": "Arif <Bestello>",
+  "icon": "headphones",
+  "type": "widget",
+  "component": "./CmfWidget.qml",
+  "settings": "./CmfSettings.qml",
+  "permissions": ["settings_read", "settings_write", "process"]
+}
