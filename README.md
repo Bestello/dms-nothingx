@@ -16,10 +16,10 @@ A [DankMaterialShell](https://github.com/DankMaterialShell) plugin to control an
 
 The plugin uses the standard Nothing/CMF Bluetooth RFCOMM protocol, so it should support:
 - CMF Buds Pro 2
-- CMF Buds / Buds Pro
-- CMF Neckband Pro
-- Nothing Ear (1), Ear (2), Ear (a)
-- Nothing Ear (Stick), Ear (Open)
+- ~~CMF Buds / Buds Pro~~
+- ~~CMF Neckband Pro~~
+- ~~Nothing Ear (1), Ear (2), Ear (a)~~
+- ~~Nothing Ear (Stick), Ear (Open)~~
 
 ## Installation
 
