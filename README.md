@@ -1,6 +1,6 @@
-# DankMaterialShell - CMF Buds Controller
+# Nothing X (DMS)
 
-A [DankMaterialShell](https://github.com/DankMaterialShell) plugin to control and monitor CMF by Nothing and Nothing audio devices directly from your desktop widget.
+A [DankMaterialShell](https://github.com/AvengeMedia/DankMaterialShell) plugin to control and monitor CMF by Nothing and Nothing audio devices directly from your desktop widget.
 
 ## Features
 
@@ -8,18 +8,18 @@ A [DankMaterialShell](https://github.com/DankMaterialShell) plugin to control an
 - **ANC Control**: Switch between Noise Cancellation, Transparency, and Off modes.
 - **Equalizer Presets**: Select between various EQ presets (Dirac, Pop, Rock, Electronic, etc.).
 - **Toggles**: Easily toggle Spatial Audio, Low Latency (Gaming Mode), and In-Ear Detection.
-- **Ultra Bass**: Enable and adjust the Ultra Bass intensity level.
+- **Ultra Bass**: Toggle Ultra Bass.
 
 *Note: Features supported will depend on your specific earbud model.*
 
 ## Supported Devices
 
-The plugin uses the standard Nothing/CMF Bluetooth RFCOMM protocol, so it should support:
-- CMF Buds Pro 2
-- ~~CMF Buds / Buds Pro~~
-- ~~CMF Neckband Pro~~
-- ~~Nothing Ear (1), Ear (2), Ear (a)~~
-- ~~Nothing Ear (Stick), Ear (Open)~~
+The plugin uses the standard Nothing/CMF Bluetooth RFCOMM protocol, it currently support:
+- [x] CMF Buds Pro 2
+- [ ] CMF Buds / Buds Pro
+- [ ] CMF Neckband Pro
+- [ ] Nothing Ear (1), Ear (2), Ear (a)
+- [ ] Nothing Ear (Stick), Ear (Open)
 
 ## Installation
 
@@ -48,6 +48,13 @@ If the widget fails to connect or update settings:
 - Ensure your earbuds are currently connected to your computer via Bluetooth.
 - Double-check that the MAC Address in the plugin settings is exactly correct.
 - Check the logs located at `/tmp/cmf_widget.log` and `/tmp/cmf_bash.log` for any python or bluetooth connectivity errors.
+- 
+## Credits 
+
+All credits goes to the creators of these repos, i just merely copy pasted them.
+[nothing-bar](https://github.com/bestK1ngArthur/nothing-bar)
+[Bluetooth-Battery-Meter](https://github.com/maniacx/Bluetooth-Battery-Meter)
+[ear-web](https://github.com/radiance-project/ear-web)
 
 ## License
 
