@@ -48,13 +48,13 @@ If the widget fails to connect or update settings:
 - Ensure your earbuds are currently connected to your computer via Bluetooth.
 - Double-check that the MAC Address in the plugin settings is exactly correct.
 - Check the logs located at `/tmp/cmf_widget.log` and `/tmp/cmf_bash.log` for any python or bluetooth connectivity errors.
-- 
+
 ## Credits 
 
 All credits goes to the creators of these repos, i just merely copy pasted them.
-[nothing-bar](https://github.com/bestK1ngArthur/nothing-bar)
-[Bluetooth-Battery-Meter](https://github.com/maniacx/Bluetooth-Battery-Meter)
-[ear-web](https://github.com/radiance-project/ear-web)
+- [nothing-bar](https://github.com/bestK1ngArthur/nothing-bar)
+- [Bluetooth-Battery-Meter](https://github.com/maniacx/Bluetooth-Battery-Meter)
+- [ear-web](https://github.com/radiance-project/ear-web)
 
 ## License
 
