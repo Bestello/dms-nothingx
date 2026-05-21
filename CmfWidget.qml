@@ -119,7 +119,11 @@ PluginComponent {
             ToastService.showInfo("Buds", "Set: " + friendlyName);
         }
     }
-    
+    function battupdate() {
+      var scriptPath = root.pluginDir + "/cmf_controller.py";
+      batteryProcess.command = ["python3", scriptPath, root.macAddress, "battery"];
+      batteryProcess.running = true;    
+    }
     function getEqName(preset) {
         if (preset === "dirac") return "Dirac";
         if (preset === "pop") return "PoP";
@@ -139,6 +143,7 @@ PluginComponent {
             if (connected !== root.isConnected) {
                 root.isConnected = connected;
                 if (connected) {
+                    root.battupdate();
                     // Refresh battery immediately
                     refreshDebounce.restart();
                     // Fetch all toggle/switch states from the device
@@ -267,20 +272,20 @@ PluginComponent {
     // ==========================================
 
     horizontalBarPill: Component {
-        Row {
-            spacing: Theme.spacingS
-            DankIcon { name: "headphones"; size: Theme.iconSize; color: Theme.primary; anchors.verticalCenter: parent.verticalCenter }
-            StyledText { 
+      Row {
+          spacing: Theme.spacingS 
+            DankIcon { name: "earbuds_2"; size: Theme.iconSize - 5; color: Theme.primary; anchors.verticalCenter: parent.verticalCenter }
+            StyledText {
                 text: (root.isConnected && (root.batteryL > 0 || root.batteryR > 0)) ? "L " + root.batteryL + "% • R " + root.batteryR + "%" : "Buds"
                 font.pixelSize: Theme.fontSizeMedium; color: Theme.surfaceText; anchors.verticalCenter: parent.verticalCenter 
             }
-        }
+          }
     }
 
     verticalBarPill: Component {
         Column {
-            spacing: Theme.spacingXS
-            DankIcon { name: "earbuds"; size: Theme.iconSize; color: Theme.primary; anchors.horizontalCenter: parent.horizontalCenter }
+          spacing: Theme.spacingXS
+            DankIcon { name: "earbuds_2"; size: Theme.iconSize; color: Theme.primary; anchors.horizontalCenter: parent.horizontalCenter }
             StyledText { 
                 text: (root.isConnected && (root.batteryL > 0 || root.batteryR > 0)) ? Math.max(root.batteryL, root.batteryR) + "%" : "Buds"
                 font.pixelSize: Theme.fontSizeSmall; color: Theme.surfaceText; anchors.horizontalCenter: parent.horizontalCenter 

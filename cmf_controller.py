@@ -1,4 +1,4 @@
-#SOMETHING WOKINGV
+#SOMETHING WOKING
 import socket
 import sys
 import argparse
@@ -13,15 +13,46 @@ def log(message):
 # ==========================================
 # PROTOCOL FUNDAMENTALS
 # ==========================================
+
+CRC16_ANSI_TAB = (
+    0x0000, 0xC0C1, 0xC181, 0x0140, 0xC301, 0x03C0, 0x0280, 0xC241,
+    0xC601, 0x06C0, 0x0780, 0xC741, 0x0500, 0xC5C1, 0xC481, 0x0440,
+    0xCC01, 0x0CC0, 0x0D80, 0xCD41, 0x0F00, 0xCFC1, 0xCE81, 0x0E40,
+    0x0A00, 0xCAC1, 0xCB81, 0x0B40, 0xC901, 0x09C0, 0x0880, 0xC841,
+    0xD801, 0x18C0, 0x1980, 0xD941, 0x1B00, 0xDBC1, 0xDA81, 0x1A40,
+    0x1E00, 0xDEC1, 0xDF81, 0x1F40, 0xDD01, 0x1DC0, 0x1C80, 0xDC41,
+    0x1400, 0xD4C1, 0xD581, 0x1540, 0xD701, 0x17C0, 0x1680, 0xD641,
+    0xD201, 0x12C0, 0x1380, 0xD341, 0x1100, 0xD1C1, 0xD081, 0x1040,
+    0xF001, 0x30C0, 0x3180, 0xF141, 0x3300, 0xF3C1, 0xF281, 0x3240,
+    0x3600, 0xF6C1, 0xF781, 0x3740, 0xF501, 0x35C0, 0x3480, 0xF441,
+    0x3C00, 0xFCC1, 0xFD81, 0x3D40, 0xFF01, 0x3FC0, 0x3E80, 0xFE41,
+    0xFA01, 0x3AC0, 0x3B80, 0xFB41, 0x3900, 0xF9C1, 0xF881, 0x3840,
+    0x2800, 0xE8C1, 0xE981, 0x2940, 0xEB01, 0x2BC0, 0x2A80, 0xEA41,
+    0xEE01, 0x2EC0, 0x2F80, 0xEF41, 0x2D00, 0xEDC1, 0xEC81, 0x2C40,
+    0xE401, 0x24C0, 0x2580, 0xE541, 0x2700, 0xE7C1, 0xE681, 0x2640,
+    0x2200, 0xE2C1, 0xE381, 0x2340, 0xE101, 0x21C0, 0x2080, 0xE041,
+    0xA001, 0x60C0, 0x6180, 0xA141, 0x6300, 0xA3C1, 0xA281, 0x6240,
+    0x6600, 0xA6C1, 0xA781, 0x6740, 0xA501, 0x65C0, 0x6480, 0xA441,
+    0x6C00, 0xACC1, 0xAD81, 0x6D40, 0xAF01, 0x6FC0, 0x6E80, 0xAE41,
+    0xAA01, 0x6AC0, 0x6B80, 0xAB41, 0x6900, 0xA9C1, 0xA881, 0x6840,
+    0x7800, 0xB8C1, 0xB981, 0x7940, 0xBB01, 0x7BC0, 0x7A80, 0xBA41,
+    0xBE01, 0x7EC0, 0x7F80, 0xBF41, 0x7D00, 0xBDC1, 0xBC81, 0x7C40,
+    0xB401, 0x74C0, 0x7580, 0xB541, 0x7700, 0xB7C1, 0xB681, 0x7640,
+    0x7200, 0xB2C1, 0xB381, 0x7340, 0xB101, 0x71C0, 0x7080, 0xB041,
+    0x5000, 0x90C1, 0x9181, 0x5140, 0x9301, 0x53C0, 0x5280, 0x9241,
+    0x9601, 0x56C0, 0x5780, 0x9741, 0x5500, 0x95C1, 0x9481, 0x5440,
+    0x9C01, 0x5CC0, 0x5D80, 0x9D41, 0x5F00, 0x9FC1, 0x9E81, 0x5E40,
+    0x5A00, 0x9AC1, 0x9B81, 0x5B40, 0x9901, 0x59C0, 0x5880, 0x9841,
+    0x8801, 0x48C0, 0x4980, 0x8941, 0x4B00, 0x8BC1, 0x8A81, 0x4A40,
+    0x4E00, 0x8EC1, 0x8F81, 0x4F40, 0x8D01, 0x4DC0, 0x4C80, 0x8C41,
+    0x4400, 0x84C1, 0x8581, 0x4540, 0x8701, 0x47C0, 0x4680, 0x8641,
+    0x8201, 0x42C0, 0x4380, 0x8341, 0x4100, 0x81C1, 0x8081, 0x4040,
+)
+
 def calculate_crc16(data: bytes) -> bytes:
     crc = 0xFFFF
     for b in data:
-        crc ^= b
-        for _ in range(8):
-            if crc & 1:
-                crc = (crc >> 1) ^ 0xA001
-            else:
-                crc >>= 1
+        crc = CRC16_ANSI_TAB[(crc ^ b) & 0xFF] ^ (crc >> 8)
     return bytes([crc & 0xFF, (crc >> 8) & 0xFF])
 
 def build_packet(command: int, is_write: bool, payload: list, operation_id: int = 1) -> bytes:
@@ -34,6 +65,7 @@ def build_packet(command: int, is_write: bool, payload: list, operation_id: int 
 # ==========================================
 # PARSING FUNCTIONS
 # ==========================================
+
 def parse_battery_response(data: bytes) -> dict:
     """Parse battery response from the device"""
     if len(data) < 9:
@@ -107,7 +139,7 @@ def parse_anc_response(data: bytes) -> dict:
             0x02: "mid",
             0x03: "low",
             0x04: "adaptive"
-        }
+        } 
         
         mode = anc_modes.get(mode_byte, "unknown")
         log(f"ANC Mode: {mode}")
@@ -183,6 +215,7 @@ def parse_latency_response(data: bytes) -> dict:
         log(f"Error parsing latency: {e}")
         return {}
 
+
 def parse_spatial_audio_response(data: bytes) -> dict:
     """Parse spatial audio response"""
     if len(data) < 9:
@@ -238,6 +271,7 @@ def parse_spatial_audio_response(data: bytes) -> dict:
         import traceback
         log(traceback.format_exc())
         return {}
+
 def parse_enhanced_bass_response(data: bytes) -> dict:
     """Parse enhanced bass response"""
     if len(data) < 10:
@@ -465,13 +499,71 @@ def parse_color_from_serial(serial: str) -> dict:
     except Exception as e:
         log(f"Error parsing color from serial: {e}")
         return {"color": "unknown", "sku": "", "model": "unknown"}
+def get_rfcomm_port(mac_address: str, force_scan: bool = False) -> int:
+    """Find the correct RFCOMM port by scanning and caching the result."""
+    import os
+    cache_file = f"/tmp/cmf_port_{mac_address.replace(':', '')}.txt"
+    
+    if not force_scan:
+        try:
+            with open(cache_file, "r") as f:
+                return int(f.read().strip())
+        except:
+            pass
+            
+    log("Scanning for correct RFCOMM port...")
+    # Prioritize commonly used ports, then scan all
+    ports_to_try = [15, 16, 17, 12, 13, 14] + list(range(1, 31))
+    
+    # Test payload: Firmware GET (harmless, always responds if port is correct)
+    test_payload = build_packet(0x42, False, []) 
+    
+    # We only want to test unique ports
+    tested = set()
+    for port in ports_to_try:
+        if port in tested: continue
+        tested.add(port)
+        
+        try:
+            sock = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
+            sock.settimeout(0.4)
+            sock.connect((mac_address, port))
+            sock.send(test_payload)
+            data = sock.recv(1024)
+            sock.close()
+            
+            if len(data) > 0 and data[0] == 0x55:
+                log(f"Found valid service on port {port}")
+                with open(cache_file, "w") as f:
+                    f.write(str(port))
+                return port
+        except:
+            pass
+            
+    log("Failed to find open RFCOMM port. Defaulting to 15.")
+    return 15
+
+def get_connected_socket(mac_address: str):
+    """Get a connected socket, handling rescans if the port changed."""
+    port = get_rfcomm_port(mac_address)
+    log(f"Attempting connection to {mac_address} on cached port {port}...")
+    try:
+        sock = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
+        sock.settimeout(2)
+        sock.connect((mac_address, port))
+        return sock
+    except Exception as e:
+        log(f"Connection failed on port {port} ({e}), forcing rescan...")
+        port = get_rfcomm_port(mac_address, force_scan=True)
+        sock = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
+        sock.settimeout(2)
+        sock.connect((mac_address, port))
+        return sock
+
 def read_info(mac_address: str, info_type: str):
     """Read information from the device"""
     try:
-        log(f"Connecting to {mac_address} on RFCOMM channel 16...")
-        sock = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
-        sock.settimeout(2)
-        sock.connect((mac_address, 16))
+        sock = get_connected_socket(mac_address)
         
         log(f"Connected! Requesting {info_type}...")
         
@@ -513,6 +605,7 @@ def read_info(mac_address: str, info_type: str):
                         if "serial" in info:
                             color_info = parse_color_from_serial(info["serial"])
                             result[device]["color"] = color_info["color"]
+                            result[device]["model"] = color_info["model"]
                             result[device]["sku"] = color_info["sku"]
                 
                 print(json.dumps(result, indent=2))
@@ -529,9 +622,7 @@ def read_info(mac_address: str, info_type: str):
 
 def send_packet(mac_address: str, packet: bytes):
     try:
-        log(f"Connecting to {mac_address} on RFCOMM channel 16...")
-        sock = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
-        sock.connect((mac_address, 16))
+        sock = get_connected_socket(mac_address)
         
         log("Connected! Sending payload...")
         sock.send(packet)
@@ -549,6 +640,7 @@ def send_packet(mac_address: str, packet: bytes):
 # ==========================================
 # COMMAND PARSING
 # ==========================================
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("mac")
@@ -625,6 +717,7 @@ if __name__ == "__main__":
             "classical": 0x05,
             "custom": 0x06
         }
+
         if args.value in eq_presets:
             eq_byte = eq_presets[args.value]
             packet = build_packet(0x1D, True, [eq_byte, 0x00])
@@ -634,3 +727,4 @@ if __name__ == "__main__":
     else:
         log(f"FAIL: Invalid payload generated for {args.feature}={args.value}")
         sys.exit(1)
+         
