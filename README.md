@@ -6,9 +6,11 @@ A [DankMaterialShell](https://github.com/AvengeMedia/DankMaterialShell) plugin t
 
 - **Battery Monitoring**: View real-time battery levels for the Left Bud, Right Bud, and Charging Case.
 - **ANC Control**: Switch between Noise Cancellation, Transparency, and Off modes.
-- **Equalizer Presets**: Select between various EQ presets (Dirac, Pop, Rock, Electronic, etc.).
+- **Equalizer Presets**: Select between various EQ presets (Dirac, Pop, Rock, Electronic) or configure your own Custom EQ payload.
 - **Toggles**: Easily toggle Spatial Audio, Low Latency (Gaming Mode), and In-Ear Detection.
-- **Ultra Bass**: Toggle Ultra Bass.
+- **Ultra Bass**: Dynamically control your Ultra Bass level.
+- **Find My Earbuds**: Remotely play a sound on your left or right earbud to locate them.
+- **Dual Connection**: View and manage your dual-device connectivity settings.
 
 *Note: Features supported will depend on your specific earbud model.*
 
@@ -20,6 +22,12 @@ The plugin uses the standard Nothing/CMF Bluetooth RFCOMM protocol, it currently
 - [ ] CMF Neckband Pro
 - [ ] Nothing Ear (1), Ear (2), Ear (a)
 - [ ] Nothing Ear (Stick), Ear (Open)
+
+## Architecture
+
+The plugin uses a simple two-layer architecture:
+- **Backend (`cmf_core`)**: A lightweight Python daemon that communicates with the earbuds over Bluetooth RFCOMM to instantly push state changes (like ANC or battery updates) as JSON.
+- **Frontend (`qml`)**: A native QML interface built with Quickshell, fully styled and integrated into the Dank Material Shell ecosystem.
 
 ## Installation
 

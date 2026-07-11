@@ -1,0 +1,53 @@
+{
+  "device_id": "B181",
+  "name": "Nothing ear (1)",
+  "capabilities": {
+    "anc": true,
+    "custom_eq": false,
+    "spatial_audio": false,
+    "low_latency": true,
+    "in_ear_detection": false,
+    "ultra_bass": false,
+    "ldac": false,
+    "dual_connection": false,
+    "gestures": true
+  },
+  "anc_modes": [
+    "off",
+    "transparency",
+    "high",
+    "low"
+  ],
+  "eq_presets": [
+    "balanced",
+    "voice",
+    "more_treble",
+    "more_bass"
+  ],
+  "gesture_slots": [
+    {
+      "group": "left",
+      "device": 2,
+      "button_id": 1,
+      "type": "triple"
+    },
+    {
+      "group": "left",
+      "device": 2,
+      "button_id": 1,
+      "type": "action-hold"
+    },
+    {
+      "group": "right",
+      "device": 3,
+      "button_id": 1,
+      "type": "triple"
+    },
+    {
+      "group": "right",
+      "device": 3,
+      "button_id": 1,
+      "type": "action-hold"
+    }
+  ]
+}

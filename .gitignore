@@ -1,0 +1,32 @@
+# Ignore asset generation script
+copy_assets.py
+
+# Python caches
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+
+# Virtual Environments
+venv/
+.venv/
+env/
+.env
+
+# Editor/IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Logs
+*.log
+
+# Test and Debug Scripts
+test/
+test_dbus.sh
+oldApp.qml
+dms_plugin_docs.md

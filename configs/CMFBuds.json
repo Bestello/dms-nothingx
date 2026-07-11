@@ -1,0 +1,78 @@
+{
+  "device_id": "B168",
+  "name": "CMF Buds",
+  "capabilities": {
+    "anc": true,
+    "custom_eq": true,
+    "spatial_audio": false,
+    "low_latency": true,
+    "in_ear_detection": true,
+    "ultra_bass": true,
+    "ldac": false,
+    "dual_connection": true,
+    "gestures": true
+  },
+  "anc_modes": [
+    "off",
+    "transparency"
+  ],
+  "eq_presets": [
+    "dirac",
+    "pop",
+    "rock",
+    "electronic",
+    "enhance_vocals",
+    "classical",
+    "custom"
+  ],
+  "gesture_slots": [
+    {
+      "group": "left",
+      "device": 2,
+      "button_id": 1,
+      "type": "double"
+    },
+    {
+      "group": "left",
+      "device": 2,
+      "button_id": 1,
+      "type": "triple"
+    },
+    {
+      "group": "left",
+      "device": 2,
+      "button_id": 1,
+      "type": "action-hold"
+    },
+    {
+      "group": "left",
+      "device": 2,
+      "button_id": 1,
+      "type": "double-action-hold"
+    },
+    {
+      "group": "right",
+      "device": 3,
+      "button_id": 1,
+      "type": "double"
+    },
+    {
+      "group": "right",
+      "device": 3,
+      "button_id": 1,
+      "type": "triple"
+    },
+    {
+      "group": "right",
+      "device": 3,
+      "button_id": 1,
+      "type": "action-hold"
+    },
+    {
+      "group": "right",
+      "device": 3,
+      "button_id": 1,
+      "type": "double-action-hold"
+    }
+  ]
+}

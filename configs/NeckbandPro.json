@@ -1,0 +1,50 @@
+{
+  "device_id": "B164",
+  "name": "Neckband Pro",
+  "capabilities": {
+    "anc": true,
+    "custom_eq": true,
+    "spatial_audio": false,
+    "low_latency": true,
+    "in_ear_detection": false,
+    "ultra_bass": true,
+    "ldac": false,
+    "dual_connection": true,
+    "gestures": true
+  },
+  "anc_modes": [
+    "off",
+    "transparency",
+    "high",
+    "mid",
+    "low",
+    "adaptive"
+  ],
+  "eq_presets": [
+    "balanced",
+    "voice",
+    "more_treble",
+    "more_bass",
+    "custom"
+  ],
+  "gesture_slots": [
+    {
+      "group": "single",
+      "device": 6,
+      "button_id": 1,
+      "type": "double"
+    },
+    {
+      "group": "single",
+      "device": 6,
+      "button_id": 1,
+      "type": "triple"
+    },
+    {
+      "group": "single",
+      "device": 6,
+      "button_id": 1,
+      "type": "action-hold"
+    }
+  ]
+}

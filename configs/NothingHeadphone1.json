@@ -1,0 +1,51 @@
+{
+  "device_id": "B170",
+  "name": "Nothing Headphone (1)",
+  "capabilities": {
+    "anc": true,
+    "custom_eq": true,
+    "spatial_audio": false,
+    "low_latency": true,
+    "in_ear_detection": true,
+    "ultra_bass": true,
+    "ldac": false,
+    "dual_connection": true,
+    "gestures": true
+  },
+  "anc_modes": [
+    "off",
+    "transparency",
+    "high",
+    "mid",
+    "low",
+    "adaptive"
+  ],
+  "eq_presets": [
+    "balanced",
+    "voice",
+    "more_treble",
+    "more_bass",
+    "custom",
+    "advance"
+  ],
+  "gesture_slots": [
+    {
+      "group": "single",
+      "device": 6,
+      "button_id": 10,
+      "type": "single"
+    },
+    {
+      "group": "single",
+      "device": 6,
+      "button_id": 10,
+      "type": "action-hold"
+    },
+    {
+      "group": "roller",
+      "device": 6,
+      "button_id": 1,
+      "type": "roller-action-hold"
+    }
+  ]
+}
