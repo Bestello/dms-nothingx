@@ -224,7 +224,7 @@ Window {
                 value: appWindow.ultraBassLevel
                 onValueChanged: {
                     appWindow.ultraBassLevel = value;
-                    if (controller) {
+                    if (controller && ubSlider.pressed) {
                         controller.updateState("ultraBassLevel", value);
                         controller.sendCommand("ultra_bass", "set", value, "", "Ultra Bass");
                     }

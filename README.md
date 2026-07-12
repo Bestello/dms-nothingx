@@ -18,7 +18,7 @@ A [DankMaterialShell](https://github.com/AvengeMedia/DankMaterialShell) plugin t
 
 The plugin uses the standard Nothing/CMF Bluetooth RFCOMM protocol, it currently support:
 - [x] CMF Buds Pro 2
-- [ ] CMF Buds / Buds Pro
+- [x] CMF Buds / Buds Pro
 - [ ] CMF Neckband Pro
 - [ ] Nothing Ear (1), Ear (2), Ear (a)
 - [ ] Nothing Ear (Stick), Ear (Open)

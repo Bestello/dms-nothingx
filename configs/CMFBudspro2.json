@@ -8,7 +8,7 @@
     "low_latency": true,
     "in_ear_detection": true,
     "ultra_bass": true,
-    "ldac": false,
+    "ldac": true,
     "dual_connection": true,
     "gestures": true
   },

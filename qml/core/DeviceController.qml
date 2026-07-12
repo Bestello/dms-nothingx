@@ -45,6 +45,14 @@ Item {
 
     property var connectedDevices: [] // Used for dual connection devices list
 
+    // Dynamic Capabilities loaded from JSON Config
+    property var capabilities: ({})
+    property var ancModes: []
+
+    onDeviceNameChanged: {
+        loadCapabilities();
+    }
+
     // ---------------------------------------------------------
     // PUBLIC API
     // ---------------------------------------------------------
@@ -137,6 +145,29 @@ Item {
         }
     }
 
+    // Load device capabilities from local configs
+    Timer {
+        id: capabilitiesDebounceTimer
+        interval: 20
+        onTriggered: {
+            if (capabilitiesProcess.running) {
+                capabilitiesDebounceTimer.start();
+                return;
+            }
+            if (!pluginDir || pluginDir === "" || !deviceName) return;
+            var configName = deviceName.replace(/_/g, "");
+            if (configName === "CMFBudsPro2") {
+                configName = "CMFBudspro2";
+            }
+            capabilitiesProcess.command = ["cat", pluginDir + "/configs/" + configName + ".json"];
+            capabilitiesProcess.running = true;
+        }
+    }
+
+    function loadCapabilities() {
+        capabilitiesDebounceTimer.restart();
+    }
+
     // ---------------------------------------------------------
     // INTERNAL LOGIC & PROCESSES
     // ---------------------------------------------------------
@@ -167,7 +198,7 @@ Item {
                 return;
             var data = JSON.parse(jsonBuffer.substring(jsonStart, jsonEnd + 1));
 
-            if (setting === "anc" && data.anc_mode !== undefined) {
+            if (setting === "anc" && data.anc_mode !== undefined && data.anc_mode !== "unknown") {
                 var mode = data.anc_mode;
                 if (mode === "off") {
                     updateState("currentMode", "off");
@@ -177,16 +208,16 @@ Item {
                     updateState("currentMode", "anc");
                     updateState("ancSubMode", mode);
                 }
-            } else if (setting === "eq" && data.eq !== undefined) {
-                updateState("eqPreset", data.eq);
-            } else if (setting === "spatial_audio" && data.spatial_audio !== undefined) {
+            } else if (setting === "eq" && data.eq_preset !== undefined && data.eq_preset !== "unknown") {
+                updateState("eqPreset", data.eq_preset);
+            } else if (setting === "spatial_audio" && data.spatial_audio !== undefined && data.spatial_audio !== "unknown") {
                 updateState("spatialAudio", (data.spatial_audio !== "off" && data.spatial_audio !== false));
             } else if (setting === "low_latency" && data.low_latency !== undefined) {
                 updateState("gamingMode", (data.low_latency !== "off" && data.low_latency !== false));
-            } else if (setting === "in_ear" && data.in_ear !== undefined) {
-                updateState("inEarDetection", (data.in_ear !== "off" && data.in_ear !== false));
-            } else if (setting === "ultra_bass" && data.ultra_bass !== undefined) {
-                updateState("ultraBass", (data.ultra_bass !== "off" && data.ultra_bass !== 0 && data.ultra_bass !== false));
+            } else if (setting === "in_ear" && data.in_ear_detection !== undefined) {
+                updateState("inEarDetection", (data.in_ear_detection !== "off" && data.in_ear_detection !== false));
+            } else if (setting === "ultra_bass" && data.enhanced_bass !== undefined) {
+                updateState("ultraBass", (data.enhanced_bass.enabled !== false));
             }
         } catch (e) {
             console.log("Error applying setting response: " + e);
@@ -252,9 +283,40 @@ Item {
 
     Timer {
         id: settingsFetchNextTimer
-        interval: 400
+        interval: 50
         repeat: false
         onTriggered: _fetchNextSetting()
+    }
+
+
+    // Config / Capabilities Fetch Process
+    Process {
+        id: capabilitiesProcess
+        property string jsonBuffer: ""
+
+        stdout: SplitParser {
+            onRead: function (line) {
+                capabilitiesProcess.jsonBuffer += line + "\n";
+            }
+        }
+
+        onExited: function (code) {
+            if (code === 0 && capabilitiesProcess.jsonBuffer.trim().length > 0) {
+                try {
+                    var json = JSON.parse(capabilitiesProcess.jsonBuffer);
+                    if (json.capabilities) {
+                        json.capabilities["find_my"] = true;
+                        rootController.capabilities = json.capabilities;
+                    }
+                    if (json.anc_modes) {
+                        rootController.ancModes = json.anc_modes;
+                    }
+                } catch (e) {
+                    console.log("Error parsing config JSON: " + e);
+                }
+            }
+            capabilitiesProcess.jsonBuffer = "";
+        }
     }
 
     // Battery Fetch Process
@@ -335,6 +397,7 @@ Item {
     }
 
     Component.onCompleted: {
+        loadCapabilities();
         if (macAddress !== "") {
             connectionCheckProcess.command = ["sh", "-c", "bluetoothctl info " + macAddress + " | grep -q 'Connected: yes'"];
             connectionCheckProcess.running = true;

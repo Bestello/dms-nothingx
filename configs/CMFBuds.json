@@ -14,7 +14,8 @@
   },
   "anc_modes": [
     "off",
-    "transparency"
+    "transparency",
+    "high"
   ],
   "eq_presets": [
     "dirac",

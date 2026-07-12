@@ -11,21 +11,22 @@ import "qml/core"
 PluginComponent {
     id: root
     layerNamespacePlugin: "cmf-controller"
+    property string pluginId: "dmsNothingX"
 
     // --- PERSISTENT STATE ---
-    property string macAddress: pluginData.macAddress ?? ""
-    property string deviceName: pluginData.deviceName ?? "CMF_Buds_Pro_2"
-    property string deviceColor: pluginData.deviceColor ?? "orange"
-    property string currentMode: pluginData.currentMode ?? "off"
-    property string ancSubMode: pluginData.ancSubMode ?? "adaptive"
-    property string eqPreset: pluginData.eqPreset ?? "balanced"
-    property bool spatialAudio: pluginData.spatialAudio ?? false
-    property bool gamingMode: pluginData.gamingMode ?? false
-    property bool inEarDetection: pluginData.inEarDetection ?? true
-    property bool ultraBass: pluginData.ultraBass ?? false
-    property int ultraBassLevel: pluginData.ultraBassLevel ?? 3
-    property bool dualConnectionEnabled: pluginData.dualConnectionEnabled ?? false
-    property bool ldacEnabled: pluginData.ldacEnabled ?? false
+    property string macAddress: pluginData.macAddress || (root.pluginService ? root.pluginService.loadPluginData(root.pluginId, "macAddress", "") : "")
+    property string deviceName: pluginData.deviceName || (root.pluginService ? root.pluginService.loadPluginData(root.pluginId, "deviceName", "CMF_Buds_Pro_2") : "CMF_Buds_Pro_2")
+    property string deviceColor: pluginData.deviceColor || (root.pluginService ? root.pluginService.loadPluginData(root.pluginId, "deviceColor", "orange") : "orange")
+    property string currentMode: "off"
+    property string ancSubMode: "adaptive"
+    property string eqPreset: "balanced"
+    property bool spatialAudio: false
+    property bool gamingMode: false
+    property bool inEarDetection: true
+    property bool ultraBass: false
+    property int ultraBassLevel: 3
+    property bool dualConnectionEnabled: false
+    property bool ldacEnabled: false
 
     readonly property string displayDeviceName: deviceName.replace(/_/g, " ")
     readonly property string pluginDir: Qt.resolvedUrl(".").toString().replace("file://", "")
@@ -284,8 +285,9 @@ PluginComponent {
 
                         // 2. NOISE CANCELLATION CARD
                         StyledRect {
+                            visible: controller.capabilities["anc"] === true
                             width: parent.width
-                            height: root.currentMode === "anc" ? 180 : 130
+                            height: (root.currentMode === "anc" && controller && controller.ancModes && controller.ancModes.indexOf("low") !== -1) ? 180 : 130
                             radius: Theme.cornerRadius * 2
                             color: Theme.surfaceContainerHigh
                             border.width: 1
@@ -416,7 +418,7 @@ PluginComponent {
                                 }
                                 Row {
                                     width: parent.width
-                                    visible: root.currentMode === "anc"
+                                    visible: root.currentMode === "anc" && controller && controller.ancModes && controller.ancModes.indexOf("low") !== -1
                                     spacing: Theme.spacingXS
                                     Repeater {
                                         model: [
@@ -480,6 +482,7 @@ PluginComponent {
                             opacity: controller.isConnected ? 1.0 : 0.5
 
                             FeatureCard {
+                                visible: controller.capabilities["spatial_audio"] === true
                                 width: (parent.width - Theme.spacingM) / 2
                                 title: "Spatial audio"
                                 subtitle: root.spatialAudio ? "On" : "Off"
@@ -494,6 +497,7 @@ PluginComponent {
                             }
 
                             FeatureCard {
+                                visible: controller.capabilities["ultra_bass"] === true
                                 width: (parent.width - Theme.spacingM) / 2
                                 title: "Ultra bass"
                                 subtitle: root.ultraBass ? "On" : "Off"
@@ -508,6 +512,7 @@ PluginComponent {
                             }
 
                             FeatureCard {
+                                visible: controller.capabilities["custom_eq"] === true || controller.capabilities["eq_presets"] !== undefined
                                 width: (parent.width - Theme.spacingM) / 2
                                 title: "Equaliser"
                                 subtitle: root.getEqName(root.eqPreset)

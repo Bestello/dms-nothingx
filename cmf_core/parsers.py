@@ -48,11 +48,33 @@ def parse_battery_response(data: bytes) -> Dict[str, Any]:
         return {}
 
 def parse_anc_response(data: bytes) -> Dict[str, str]:
-    if len(data) < 10:
+    if len(data) < 9:
         return {}
     try:
-        payload = data[8:]
-        mode_byte = payload[1]
+        payload_length = data[5]
+        payload = data[8:8 + payload_length]
+        
+        # We need at least 2 bytes (state + submode) for ANC
+        # We need at least 2 bytes (state + submode) for ANC
+        if len(payload) < 2:
+            return {}
+            
+        mode_byte = None
+        if len(payload) >= 3:
+            # Parse as 3-byte chunks (Key, Value, Padding)
+            # CMF Buds: 02 01 00 (Submode=High), 01 05 00 (Mode=Off)
+            # Buds Pro 2: 01 07 00 (Mode=Trans), 02 04 00 (Submode=Adapt)
+            for i in range(0, len(payload) - 1, 3):
+                key = payload[i]
+                val = payload[i+1]
+                if key == 0x01:
+                    mode_byte = val
+                    break
+                    
+        # Fallback to payload[1] for legacy 2-byte payloads or if Key 01 missing
+        if mode_byte is None:
+            mode_byte = payload[1]
+            
         anc_modes = {
             0x05: "off",
             0x07: "transparency",
@@ -70,8 +92,14 @@ def parse_eq_response(data: bytes) -> Dict[str, Any]:
     if len(data) < 9:
         return {}
     try:
-        payload = data[8:]
-        eq_byte = payload[0]
+        payload_length = data[5]
+        payload = data[8:8 + payload_length]
+        
+        if len(payload) < 1:
+            return {}
+            
+        # In Swift, if payload.count > 1, it reads payload[1], else payload[0]
+        eq_byte = payload[1] if len(payload) > 1 else payload[0]
         eq_presets = {
             0x00: "dirac", 0x01: "rock", 0x02: "electronic",
             0x03: "pop", 0x04: "enhanced_vocals", 0x05: "classical",
@@ -127,10 +155,15 @@ def parse_spatial_audio_response(data: bytes) -> Dict[str, str]:
         return {}
 
 def parse_enhanced_bass_response(data: bytes) -> Dict[str, Any]:
-    if len(data) < 10:
+    if len(data) < 9:
         return {}
     try:
-        payload = data[8:]
+        payload_length = data[5]
+        payload = data[8:8 + payload_length]
+        
+        if len(payload) < 2:
+            return {}
+            
         enabled = payload[0] != 0
         level = int(payload[1]) / 2
         return {"enhanced_bass": {"enabled": enabled, "level": level}}

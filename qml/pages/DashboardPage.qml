@@ -148,6 +148,7 @@ Item {
 
             // 2. ANC CARD
             StyledRect {
+                visible: controller ? (controller.capabilities["anc"] === true) : false
                 width: parent.width - (Theme.spacingL * 2)
                 anchors.horizontalCenter: parent.horizontalCenter
                 height: controller.currentMode === "anc" ? 190 : 140
@@ -233,7 +234,7 @@ Item {
                     Row {
                         width: parent.width
                         spacing: Theme.spacingXS
-                        visible: controller.currentMode === "anc"
+                        visible: controller.currentMode === "anc" && controller.ancModes && controller.ancModes.indexOf("low") !== -1
                         opacity: controller.currentMode === "anc" ? 1 : 0
                         Behavior on opacity { NumberAnimation { duration: 200 } }
 
@@ -273,9 +274,10 @@ Item {
                 spacing: Theme.spacingM
 
                 FeatureCard {
+                    visible: controller ? (controller.capabilities["spatial_audio"] === true) : false
                     width: (parent.width - Theme.spacingM) / 2
                     title: "Spatial audio"
-                    subtitle: controller.spatialAudio ? "On" : "Off"
+                    subtitle: controller && controller.spatialAudio ? "On" : "Off"
                     iconName: controller.spatialAudio ? "spatial_audio" : "spatial_audio_off"
                     iconColor: controller.spatialAudio ? Theme.primary : Theme.surfaceVariantText
                     onClicked: {
@@ -287,6 +289,7 @@ Item {
                 // Custom Ultra Bass Card
                 StyledRect {
                     id: ubCard
+                    visible: controller ? (controller.capabilities["ultra_bass"] === true) : false
                     width: (parent.width - Theme.spacingM) / 2
                     height: 110
                     radius: Theme.cornerRadius * 2
@@ -348,6 +351,7 @@ Item {
                 }
 
                 FeatureCard {
+                    visible: controller ? (controller.capabilities["custom_eq"] === true) : false
                     width: (parent.width - Theme.spacingM) / 2
                     title: "Equaliser"
                     subtitle: {
@@ -374,9 +378,10 @@ Item {
                 } */
 
                 FeatureCard {
+                    visible: controller ? (controller.capabilities["low_latency"] === true) : false
                     width: (parent.width - Theme.spacingM) / 2
                     title: "Low lag mode"
-                    subtitle: controller.gamingMode ? "On" : "Off"
+                    subtitle: controller && controller.gamingMode ? "On" : "Off"
                     iconName: controller.gamingMode ? "toggle_on" : "toggle_off"
                     iconColor: controller.gamingMode ? Theme.primary : Theme.surfaceVariantText
                     onClicked: {

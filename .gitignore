@@ -26,7 +26,14 @@ env/
 *.log
 
 # Test and Debug Scripts
+references/
 test/
 test_dbus.sh
 oldApp.qml
 dms_plugin_docs.md
+
+
+# Debug Scripts
+test_raw*
+main_wrapper.sh
+parse_debug.py

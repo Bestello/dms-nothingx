@@ -71,6 +71,7 @@ Item {
         // but here we keep the original layout slightly cleaned up.
         
         StyledRect {
+            visible: controller ? (controller.capabilities["ldac"] === true) : false
             width: parent.width
             height: 60
             radius: Theme.cornerRadius * 2
@@ -114,6 +115,7 @@ Item {
         }
 
         StyledRect {
+            visible: controller ? (controller.capabilities["in_ear_detection"] === true) : false
             width: parent.width
             height: 60
             radius: Theme.cornerRadius * 2
@@ -152,6 +154,7 @@ Item {
         }
 
         StyledRect {
+            visible: controller ? (controller.capabilities["find_my"] === true) : false
             width: parent.width
             height: 60
             radius: Theme.cornerRadius * 2
