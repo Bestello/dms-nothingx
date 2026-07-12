@@ -340,7 +340,7 @@ Item {
                         var data = JSON.parse(cleanJson);
                         batteryL = (data.left && data.left.level !== null) ? data.left.level : 0;
                         batteryR = (data.right && data.right.level !== null) ? data.right.level : 0;
-                        batteryC = (data.case && data.case.level !== null) ? data.case.level : 0;
+                        batteryC = (data["case"] && data["case"].level !== null) ? data["case"].level : 0;
                     }
                 } catch (e) {}
             }
