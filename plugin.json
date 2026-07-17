@@ -2,7 +2,7 @@
   "id": "dmsNothingX",
   "name": "dms-nothingX",
   "description": "Control ANC modes for CMF by Nothing devices",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "author": "Arif <Bestello>",
   "icon": "earbuds_2",
   "type": "widget",

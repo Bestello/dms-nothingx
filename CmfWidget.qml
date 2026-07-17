@@ -14,9 +14,9 @@ PluginComponent {
     property string pluginId: "dmsNothingX"
 
     // --- PERSISTENT STATE ---
-    property string macAddress: pluginData.macAddress || (root.pluginService ? root.pluginService.loadPluginData(root.pluginId, "macAddress", "") : "")
-    property string deviceName: pluginData.deviceName || (root.pluginService ? root.pluginService.loadPluginData(root.pluginId, "deviceName", "CMF_Buds_Pro_2") : "CMF_Buds_Pro_2")
-    property string deviceColor: pluginData.deviceColor || (root.pluginService ? root.pluginService.loadPluginData(root.pluginId, "deviceColor", "orange") : "orange")
+    property string macAddress: pluginData.macAddress ?? (root.pluginService ? root.pluginService.loadPluginData(root.pluginId, "macAddress", "") : "")
+    property string deviceName: pluginData.deviceName ?? (root.pluginService ? root.pluginService.loadPluginData(root.pluginId, "deviceName", "CMF_Buds_Pro_2") : "CMF_Buds_Pro_2")
+    property string deviceColor: pluginData.deviceColor ?? (root.pluginService ? root.pluginService.loadPluginData(root.pluginId, "deviceColor", "black") : " black")
     property string currentMode: "off"
     property string ancSubMode: "adaptive"
     property string eqPreset: "balanced"
@@ -330,7 +330,7 @@ PluginComponent {
                                             StyledText {
                                                 text: "Noise cancellation"
                                                 color: Theme.surfaceText
-                                                font.pixelSize: 10
+                                                font.pixelSize: Theme.fontSizeTiny
                                                 anchors.horizontalCenter: parent.horizontalCenter
                                             }
                                         }
@@ -366,7 +366,7 @@ PluginComponent {
                                             StyledText {
                                                 text: "Transparency"
                                                 color: Theme.surfaceText
-                                                font.pixelSize: 10
+                                                font.pixelSize: Theme.fontSizeTiny
                                                 anchors.horizontalCenter: parent.horizontalCenter
                                             }
                                         }
@@ -402,7 +402,7 @@ PluginComponent {
                                             StyledText {
                                                 text: "Off"
                                                 color: Theme.surfaceText
-                                                font.pixelSize: 10
+                                                font.pixelSize: Theme.fontSizeTiny
                                                 anchors.horizontalCenter: parent.horizontalCenter
                                             }
                                         }
@@ -455,7 +455,7 @@ PluginComponent {
                                                 StyledText {
                                                     text: modelData.name
                                                     color: root.ancSubMode === modelData.id ? Theme.primary : Theme.surfaceVariantText
-                                                    font.pixelSize: 11
+                                                    font.pixelSize: Theme.fontSizeSmall
                                                     font.weight: root.ancSubMode === modelData.id ? Font.Bold : Font.Normal
                                                     anchors.horizontalCenter: parent.horizontalCenter
                                                 }

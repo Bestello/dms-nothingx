@@ -190,7 +190,7 @@ Item {
                                     }
                                 }
                             }
-                            StyledText { text: "Noise cancel"; color: Theme.surfaceVariantText; font.pixelSize: 11; anchors.horizontalCenter: parent.horizontalCenter }
+                            StyledText { text: "Noise cancel"; color: Theme.surfaceVariantText; font.pixelSize: Theme.fontSizeSmall; anchors.horizontalCenter: parent.horizontalCenter }
                         }
 
                         // Transparency
@@ -208,7 +208,7 @@ Item {
                                     }
                                 }
                             }
-                            StyledText { text: "Transparency"; color: Theme.surfaceVariantText; font.pixelSize: 11; anchors.horizontalCenter: parent.horizontalCenter }
+                            StyledText { text: "Transparency"; color: Theme.surfaceVariantText; font.pixelSize: Theme.fontSizeSmall; anchors.horizontalCenter: parent.horizontalCenter }
                         }
 
                         // Off
@@ -226,7 +226,7 @@ Item {
                                     }
                                 }
                             }
-                            StyledText { text: "Off"; color: Theme.surfaceVariantText; font.pixelSize: 11; anchors.horizontalCenter: parent.horizontalCenter }
+                            StyledText { text: "Off"; color: Theme.surfaceVariantText; font.pixelSize: Theme.fontSizeSmall; anchors.horizontalCenter: parent.horizontalCenter }
                         }
                     }
 
@@ -251,7 +251,7 @@ Item {
                                 Column {
                                     anchors.fill: parent; spacing: 6
                                     Rectangle { width: parent.width - 4; height: 3; radius: 1.5; color: controller.ancSubMode === modelData.id ? Theme.primary : Theme.surfaceContainerHighest; anchors.horizontalCenter: parent.horizontalCenter }
-                                    StyledText { text: modelData.name; color: controller.ancSubMode === modelData.id ? Theme.primary : Theme.surfaceVariantText; font.pixelSize: 11; font.weight: controller.ancSubMode === modelData.id ? Font.Bold : Font.Normal; anchors.horizontalCenter: parent.horizontalCenter }
+                                    StyledText { text: modelData.name; color: controller.ancSubMode === modelData.id ? Theme.primary : Theme.surfaceVariantText; font.pixelSize: Theme.fontSizeSmall; font.weight: controller.ancSubMode === modelData.id ? Font.Bold : Font.Normal; anchors.horizontalCenter: parent.horizontalCenter }
                                 }
                                 MouseArea {
                                     anchors.fill: parent; cursorShape: Qt.PointingHandCursor
