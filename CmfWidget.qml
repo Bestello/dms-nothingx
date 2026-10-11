@@ -16,7 +16,18 @@ PluginComponent {
     // --- PERSISTENT STATE ---
     property string macAddress: pluginData.macAddress ?? (root.pluginService ? root.pluginService.loadPluginData(root.pluginId, "macAddress", "") : "")
     property string deviceName: pluginData.deviceName ?? (root.pluginService ? root.pluginService.loadPluginData(root.pluginId, "deviceName", "CMF_Buds_Pro_2") : "CMF_Buds_Pro_2")
-    property string deviceColor: pluginData.deviceColor ?? (root.pluginService ? root.pluginService.loadPluginData(root.pluginId, "deviceColor", "black") : " black")
+    property string deviceColor: pluginData.deviceColor ?? (root.pluginService ? root.pluginService.loadPluginData(root.pluginId, "deviceColor", "black") : "black")
+    property bool alwaysShowPill: pluginData.alwaysShowPill ?? (root.pluginService ? root.pluginService.loadPluginData(root.pluginId, "alwaysShowPill", true) : true)
+
+    _visibilityOverride: true
+    _visibilityOverrideValue: root.alwaysShowPill || controller.isConnected
+    visible: root.effectiveVisible
+
+    onEffectiveVisibleChanged: {
+        if (!root.effectiveVisible) {
+            root.closePopout();
+        }
+    }
     property string currentMode: "off"
     property string ancSubMode: "adaptive"
     property string eqPreset: "balanced"
@@ -28,7 +39,7 @@ PluginComponent {
     property bool dualConnectionEnabled: false
     property bool ldacEnabled: false
 
-    readonly property string displayDeviceName: deviceName.replace(/_/g, " ")
+    readonly property string displayDeviceName: controller.displayDeviceName
     readonly property string pluginDir: Qt.resolvedUrl(".").toString().replace("file://", "")
 
     // --- CORE LOGIC CONTROLLER ---
@@ -60,9 +71,8 @@ PluginComponent {
     }
 
     // Asset paths for UI
-    property string leftBudImg: pluginDir + "/assets/" + deviceName + "_" + deviceColor + "/left_bud.png"
-    property string rightBudImg: pluginDir + "/assets/" + deviceName + "_" + deviceColor + "/right_bud.png"
-    property string caseImg: pluginDir + "/assets/" + deviceName + "_" + deviceColor + "/case.png"
+    property string leftBudImg: controller.leftBudImg
+    property string rightBudImg: controller.rightBudImg
 
     property var advancedWindow: null
 

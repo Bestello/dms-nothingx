@@ -23,18 +23,66 @@ Item {
     property var pluginService: null
     property string pluginId: "dmsNothingX"
 
-    // Exposed State
-    property bool isConnected: false
+    // Exposed State (reactively bound to DMS / Quickshell BluetoothService)
+    property bool _ready: false
+
+    readonly property var btDevice: {
+        if (!macAddress || !BluetoothService.adapter || !BluetoothService.adapter.devices)
+            return null;
+        var targetMac = macAddress.trim().toUpperCase();
+        if (targetMac === "")
+            return null;
+        return BluetoothService.adapter.devices.values.find(d => d && (d.address || "").toUpperCase() === targetMac) ?? null;
+    }
+
+    readonly property bool isConnected: btDevice ? btDevice.connected : false
     property string deviceName: "CMF_Buds_Pro_2"
     property string deviceColor: "orange"
+
+    readonly property string displayDeviceName: {
+        var names = {
+            "CMF_Buds_Pro_2": "CMF Buds Pro 2",
+            "CMF_Buds_Pro": "CMF Buds Pro",
+            "CMF_Buds": "CMF Buds",
+            "Ear": "Nothing Ear",
+            "Ear_a": "Nothing Ear (a)",
+            "Ear_1": "Nothing Ear (1)",
+            "Ear_2": "Nothing Ear (2)",
+            "Ear_3": "Nothing Ear (3)",
+            "Ear_Open": "Nothing Ear (open)",
+            "Ear_Stick": "Nothing Ear (stick)"
+        };
+        return names[deviceName] || deviceName.replace(/_/g, " ");
+    }
+
+    readonly property string assetFolder: {
+        if (deviceName === "Ear_Open" || deviceName === "Ear_Stick") {
+            return deviceName;
+        }
+        var color = (deviceColor || "black").trim();
+        var validColors = {
+            "CMF_Buds_Pro_2": ["black", "white", "blue", "orange"],
+            "CMF_Buds_Pro": ["black", "white", "orange"],
+            "CMF_Buds": ["black", "white", "orange"],
+            "Ear": ["black", "white"],
+            "Ear_a": ["black", "white", "yellow"],
+            "Ear_1": ["black", "white"],
+            "Ear_2": ["black", "white"],
+            "Ear_3": ["black", "white"]
+        };
+        var allowed = validColors[deviceName];
+        if (allowed && allowed.indexOf(color) === -1) {
+            color = allowed[0];
+        }
+        return deviceName + "_" + color;
+    }
 
     signal stateUpdated(string key, var value)
 
     // Asset paths for UI and Notifications
-    property string leftBudImg: pluginDir + "/assets/" + deviceName + "_" + deviceColor + "/left_bud.png"
-    property string rightBudImg: pluginDir + "/assets/" + deviceName + "_" + deviceColor + "/right_bud.png"
-    property string notifyIconImg: pluginDir + "/assets/" + deviceName + "_" + deviceColor + "/notify_icon.png"
-    property string caseImg: pluginDir + "/assets/" + deviceName + "_" + deviceColor + "/case.png"
+    property string leftBudImg: pluginDir + "/assets/" + assetFolder + "/left_bud.png"
+    property string rightBudImg: pluginDir + "/assets/" + assetFolder + "/right_bud.png"
+    property string notifyIconImg: pluginDir + "/assets/" + assetFolder + "/notify_icon.png"
     property int batteryL: 0
     property int batteryR: 0
     property int batteryC: 0
@@ -49,8 +97,38 @@ Item {
     property var capabilities: ({})
     property var ancModes: []
 
+    property int initialFetchRetries: 0
+    property bool needsInitialSettingsRefresh: false
+
     onDeviceNameChanged: {
         loadCapabilities();
+    }
+
+    function _handleConnectionState(connected) {
+        if (connected) {
+            initialFetchRetries = 0;
+            needsInitialSettingsRefresh = true;
+            fetchBattery();
+            postConnectBatteryTimer.restart();
+
+            Quickshell.execDetached(["notify-send", "-a", "CMF Audio", "-i", notifyIconImg, displayDeviceName, "Connected and ready"]);
+        } else {
+            refreshDebounce.stop();
+            batteryRetryTimer.stop();
+            postConnectBatteryTimer.stop();
+            settingsFetchNextTimer.stop();
+            settingsFetchQueue = [];
+            needsInitialSettingsRefresh = false;
+            batteryL = 0;
+            batteryR = 0;
+            batteryC = 0;
+        }
+    }
+
+    onIsConnectedChanged: {
+        if (_ready) {
+            _handleConnectionState(isConnected);
+        }
     }
 
     // ---------------------------------------------------------
@@ -68,18 +146,16 @@ Item {
             return;
         }
 
-        var script = pluginDir + "/main.py";
-        var cmdArgs = macAddress + " " + feature + " " + action;
+        var args = ["python3", pluginDir + "/main.py", macAddress, feature, action];
 
         if (value !== undefined && value !== null && value !== "") {
-            cmdArgs += " " + value;
+            args.push(String(value));
         }
         if (extra !== undefined && extra !== null && extra !== "") {
-            cmdArgs += " " + extra;
+            args.push(String(extra));
         }
 
-        var cmd = "python3 " + script + " " + cmdArgs + " >> /tmp/cmf_bash.log 2>&1";
-        Quickshell.execDetached(["sh", "-c", cmd]);
+        Quickshell.execDetached(args);
 
         if (friendlyName && friendlyName !== "") {
             ToastService.showInfo("Buds", "Set: " + friendlyName);
@@ -88,10 +164,12 @@ Item {
 
     // Fetches the latest battery levels
     function fetchBattery() {
-        if (!isConnected || macAddress === "")
+        if (!isConnected || macAddress === "" || pluginDir === "")
             return;
-        if (batteryProcess.running)
+        if (batteryProcess.running || settingsFetchProcess.running) {
+            refreshDebounce.restart();
             return;
+        }
 
         batteryProcess.command = ["python3", pluginDir + "/main.py", macAddress, "battery", "get"];
         batteryProcess.running = true;
@@ -99,6 +177,8 @@ Item {
 
     // Starts the sequential fetching of all device settings
     function startSettingsRefresh() {
+        if (!isConnected || macAddress === "" || pluginDir === "")
+            return;
         settingsFetchQueue = [
             {
                 feature: "anc",
@@ -131,7 +211,7 @@ Item {
 
     // Fetches connected devices (used by Dual Connection page)
     function fetchDevices() {
-        if (macAddress !== "" && !deviceFetchProcess.running) {
+        if (isConnected && macAddress !== "" && pluginDir !== "" && !deviceFetchProcess.running) {
             deviceFetchProcess.command = ["python3", pluginDir + "/main.py", macAddress, "devices", "get"];
             deviceFetchProcess.running = true;
         }
@@ -155,10 +235,19 @@ Item {
                 return;
             }
             if (!pluginDir || pluginDir === "" || !deviceName) return;
-            var configName = deviceName.replace(/_/g, "");
-            if (configName === "CMFBudsPro2") {
-                configName = "CMFBudspro2";
-            }
+            var configMap = {
+                "CMF_Buds_Pro_2": "CMFBudsPro2",
+                "CMF_Buds_Pro": "BudsPro",
+                "CMF_Buds": "CMFBuds",
+                "Ear": "NothingEar",
+                "Ear_a": "NothingEarA",
+                "Ear_1": "NothingEar1",
+                "Ear_2": "Ear2",
+                "Ear_3": "NothingEar3",
+                "Ear_Open": "NothingEarOpen",
+                "Ear_Stick": "EarStick"
+            };
+            var configName = configMap[deviceName] || deviceName.replace(/_/g, "");
             capabilitiesProcess.command = ["cat", pluginDir + "/configs/" + configName + ".json"];
             capabilitiesProcess.running = true;
         }
@@ -173,11 +262,11 @@ Item {
     // ---------------------------------------------------------
 
     function _fetchNextSetting() {
-        if (!isConnected || macAddress === "")
+        if (!isConnected || macAddress === "" || pluginDir === "")
             return;
         if (settingsFetchIndex >= settingsFetchQueue.length)
             return;
-        if (settingsFetchProcess.running) {
+        if (settingsFetchProcess.running || batteryProcess.running) {
             settingsFetchNextTimer.start(); // back off and retry
             return;
         }
@@ -221,42 +310,6 @@ Item {
             }
         } catch (e) {
             console.log("Error applying setting response: " + e);
-        }
-    }
-
-    // Connection Check Process
-    Process {
-        id: connectionCheckProcess
-        onExited: function (code) {
-            var connected = (code === 0);
-            if (connected !== isConnected) {
-                isConnected = connected;
-                if (connected) {
-                    fetchBattery();
-                    refreshDebounce.restart();
-                    startSettingsRefresh();
-
-                    var displayDeviceName = deviceName.replace(/_/g, " ");
-                    Quickshell.execDetached(["notify-send", "-a", "CMF Audio", "-i", notifyIconImg, displayDeviceName, "Connected and ready"]);
-                } else {
-                    batteryL = 0;
-                    batteryR = 0;
-                    batteryC = 0;
-                }
-            }
-        }
-    }
-
-    Timer {
-        id: connCheckTimer
-        interval: 5000
-        running: macAddress !== ""
-        repeat: true
-        onTriggered: {
-            if (!connectionCheckProcess.running) {
-                connectionCheckProcess.command = ["sh", "-c", "bluetoothctl info " + macAddress + " | grep -q 'Connected: yes'"];
-                connectionCheckProcess.running = true;
-            }
         }
     }
 
@@ -345,6 +398,16 @@ Item {
                 } catch (e) {}
             }
             batteryProcess.jsonBuffer = "";
+
+            if (isConnected) {
+                if (batteryL === 0 && batteryR === 0 && initialFetchRetries < 5) {
+                    initialFetchRetries++;
+                    batteryRetryTimer.restart();
+                } else if (needsInitialSettingsRefresh) {
+                    needsInitialSettingsRefresh = false;
+                    startSettingsRefresh();
+                }
+            }
         }
     }
 
@@ -389,6 +452,20 @@ Item {
     }
 
     Timer {
+        id: batteryRetryTimer
+        interval: 1500
+        repeat: false
+        onTriggered: fetchBattery()
+    }
+
+    Timer {
+        id: postConnectBatteryTimer
+        interval: 3500
+        repeat: false
+        onTriggered: fetchBattery()
+    }
+
+    Timer {
         id: mainBatteryTimer
         interval: 60000
         running: isConnected && macAddress !== ""
@@ -397,10 +474,10 @@ Item {
     }
 
     Component.onCompleted: {
+        _ready = true;
         loadCapabilities();
-        if (macAddress !== "") {
-            connectionCheckProcess.command = ["sh", "-c", "bluetoothctl info " + macAddress + " | grep -q 'Connected: yes'"];
-            connectionCheckProcess.running = true;
+        if (isConnected) {
+            _handleConnectionState(true);
         }
     }
 }

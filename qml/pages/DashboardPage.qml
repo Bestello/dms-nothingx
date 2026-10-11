@@ -111,7 +111,7 @@ Item {
                 }
 
                 StyledText {
-                    text: controller.deviceName.replace(/_/g, " ")
+                    text: controller.displayDeviceName
                     font.pixelSize: Theme.fontSizeLarge
                     font.weight: Font.Bold
                     color: Theme.surfaceText
