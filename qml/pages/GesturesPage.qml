@@ -1,6 +1,7 @@
 import QtQuick
 import qs.Common
 import qs.Widgets
+import qs.DCommon.Widgets
 
 /*
  * GesturesPage.qml
@@ -30,7 +31,7 @@ Item {
             onPressed: window.startSystemMove()
         }
 
-        DankIcon {
+        DIcon {
             id: backIconControls
             name: "arrow_back"
             color: Theme.surfaceText
@@ -82,7 +83,7 @@ Item {
                     anchors.verticalCenter: parent.verticalCenter
                     width: parent.width - 40
                 }
-                DankIcon {
+                DIcon {
                     name: "chevron_right"
                     color: Theme.surfaceVariantText
                     size: 24
@@ -110,7 +111,7 @@ Item {
                     anchors.verticalCenter: parent.verticalCenter
                     width: parent.width - 40
                 }
-                DankIcon {
+                DIcon {
                     name: "chevron_right"
                     color: Theme.surfaceVariantText
                     size: 24

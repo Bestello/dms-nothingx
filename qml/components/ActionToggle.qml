@@ -1,6 +1,7 @@
 import QtQuick
 import qs.Common
 import qs.Widgets
+import qs.DCommon.Widgets
 
 /*
  * ActionToggle.qml
@@ -51,7 +52,7 @@ Item {
             height: 40
             anchors.verticalCenter: parent.verticalCenter
             
-            DankIcon {
+            DIcon {
                 anchors.centerIn: parent
                 name: root.checked ? "toggle_on" : "toggle_off"
                 color: root.checked ? Theme.primary : Theme.surfaceVariantText

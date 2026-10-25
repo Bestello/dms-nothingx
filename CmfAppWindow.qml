@@ -3,6 +3,7 @@ import QtQuick.Window
 import QtQuick.Controls
 import qs.Common
 import qs.Widgets
+import qs.DCommon.Widgets
 import qs.Services
 import Quickshell
 import Quickshell.Io
@@ -202,7 +203,7 @@ Window {
                     width: parent.width - 48
                     horizontalAlignment: Text.AlignHCenter
                 }
-                DankIcon {
+                DIcon {
                     name: "close"
                     size: 24
                     color: Theme.surfaceText

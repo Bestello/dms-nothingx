@@ -1,6 +1,7 @@
 import QtQuick
 import qs.Common
 import qs.Widgets
+import qs.DCommon.Widgets
 
 /*
  * FeatureCard.qml
@@ -34,20 +35,24 @@ StyledRect {
         spacing: 2
         
         StyledText { 
+            width: parent.width
             text: root.title
             color: Theme.surfaceText
             font.pixelSize: Theme.fontSizeSmall
-            font.weight: Font.Bold 
+            font.weight: Font.Bold
+            elide: Text.ElideRight
         }
         StyledText { 
+            width: parent.width
             text: root.subtitle
             color: Theme.surfaceVariantText
-            font.pixelSize: Theme.fontSizeSmall 
+            font.pixelSize: Theme.fontSizeSmall
+            elide: Text.ElideRight
         }
         
         Item { width: 1; height: Theme.spacingS }
         
-        DankIcon { 
+        DIcon { 
             name: root.iconName
             size: Theme.iconSize * 1.5
             color: root.iconColor

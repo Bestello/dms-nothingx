@@ -4,6 +4,7 @@ import Quickshell.Io
 import qs.Common
 import qs.Services
 import qs.Widgets
+import qs.DCommon.Widgets
 import qs.Modules.Plugins
 import "qml/components"
 import "qml/core"
@@ -123,7 +124,7 @@ PluginComponent {
     horizontalBarPill: Component {
         Row {
             spacing: Theme.spacingS
-            DankIcon {
+            DIcon {
                 name: "earbuds_2"
                 size: Theme.iconSize - 5
                 color: Theme.primary
@@ -149,7 +150,7 @@ PluginComponent {
     verticalBarPill: Component {
         Column {
             spacing: Theme.spacingXS
-            DankIcon {
+            DIcon {
                 name: "earbuds_2"
                 size: Theme.iconSize
                 color: Theme.primary
@@ -297,7 +298,7 @@ PluginComponent {
                         StyledRect {
                             visible: controller.capabilities["anc"] === true
                             width: parent.width
-                            height: (root.currentMode === "anc" && controller && controller.ancModes && controller.ancModes.indexOf("low") !== -1) ? 180 : 130
+                            height: (root.currentMode === "anc" && controller && controller.ancModes && controller.ancModes.indexOf("low") !== -1) ? 190 : 140
                             radius: Theme.cornerRadius * 2
                             color: Theme.surfaceContainerHigh
                             border.width: 1
@@ -307,7 +308,7 @@ PluginComponent {
                             Column {
                                 anchors.fill: parent
                                 anchors.margins: Theme.spacingM
-                                spacing: Theme.spacingL
+                                spacing: Theme.spacingM
                                 StyledText {
                                     text: "Noise cancellation"
                                     font.pixelSize: Theme.fontSizeMedium
@@ -320,17 +321,19 @@ PluginComponent {
                                     // ANC Button
                                     Item {
                                         width: (parent.width - (Theme.spacingS * 2)) / 3
-                                        height: 70
+                                        height: 76
                                         Column {
-                                            anchors.centerIn: parent
-                                            spacing: Theme.spacingS
+                                            anchors.top: parent.top
+                                            anchors.horizontalCenter: parent.horizontalCenter
+                                            width: parent.width
+                                            spacing: Theme.spacingXS
                                             Rectangle {
                                                 width: 50
                                                 height: 50
                                                 radius: 25
                                                 anchors.horizontalCenter: parent.horizontalCenter
                                                 color: root.currentMode === "anc" ? Theme.primary : Theme.surfaceContainerHighest
-                                                DankIcon {
+                                                DIcon {
                                                     name: "noise_control_on"
                                                     size: Theme.iconSize
                                                     color: root.currentMode === "anc" ? Theme.surfaceContainer : Theme.surfaceText
@@ -338,10 +341,14 @@ PluginComponent {
                                                 }
                                             }
                                             StyledText {
-                                                text: "Noise cancellation"
+                                                width: parent.width
+                                                text: "Noise cancel"
                                                 color: Theme.surfaceText
                                                 font.pixelSize: Theme.fontSizeTiny
-                                                anchors.horizontalCenter: parent.horizontalCenter
+                                                horizontalAlignment: Text.AlignHCenter
+                                                wrapMode: Text.WordWrap
+                                                maximumLineCount: 2
+                                                elide: Text.ElideRight
                                             }
                                         }
                                         MouseArea {
@@ -356,17 +363,19 @@ PluginComponent {
                                     // Transparency Button
                                     Item {
                                         width: (parent.width - (Theme.spacingS * 2)) / 3
-                                        height: 70
+                                        height: 76
                                         Column {
-                                            anchors.centerIn: parent
-                                            spacing: Theme.spacingS
+                                            anchors.top: parent.top
+                                            anchors.horizontalCenter: parent.horizontalCenter
+                                            width: parent.width
+                                            spacing: Theme.spacingXS
                                             Rectangle {
                                                 width: 50
                                                 height: 50
                                                 radius: 25
                                                 anchors.horizontalCenter: parent.horizontalCenter
                                                 color: root.currentMode === "transparency" ? Theme.primary : Theme.surfaceContainerHighest
-                                                DankIcon {
+                                                DIcon {
                                                     name: "hearing"
                                                     size: Theme.iconSize
                                                     color: root.currentMode === "transparency" ? Theme.surfaceContainer : Theme.surfaceText
@@ -374,10 +383,14 @@ PluginComponent {
                                                 }
                                             }
                                             StyledText {
+                                                width: parent.width
                                                 text: "Transparency"
                                                 color: Theme.surfaceText
                                                 font.pixelSize: Theme.fontSizeTiny
-                                                anchors.horizontalCenter: parent.horizontalCenter
+                                                horizontalAlignment: Text.AlignHCenter
+                                                wrapMode: Text.WordWrap
+                                                maximumLineCount: 2
+                                                elide: Text.ElideRight
                                             }
                                         }
                                         MouseArea {
@@ -392,17 +405,19 @@ PluginComponent {
                                     // Off Button
                                     Item {
                                         width: (parent.width - (Theme.spacingS * 2)) / 3
-                                        height: 70
+                                        height: 76
                                         Column {
-                                            anchors.centerIn: parent
-                                            spacing: Theme.spacingS
+                                            anchors.top: parent.top
+                                            anchors.horizontalCenter: parent.horizontalCenter
+                                            width: parent.width
+                                            spacing: Theme.spacingXS
                                             Rectangle {
                                                 width: 50
                                                 height: 50
                                                 radius: 25
                                                 anchors.horizontalCenter: parent.horizontalCenter
                                                 color: root.currentMode === "off" ? Theme.primary : Theme.surfaceContainerHighest
-                                                DankIcon {
+                                                DIcon {
                                                     name: "noise_control_off"
                                                     size: Theme.iconSize
                                                     color: root.currentMode === "off" ? Theme.surfaceContainer : Theme.surfaceText
@@ -410,10 +425,14 @@ PluginComponent {
                                                 }
                                             }
                                             StyledText {
+                                                width: parent.width
                                                 text: "Off"
                                                 color: Theme.surfaceText
                                                 font.pixelSize: Theme.fontSizeTiny
-                                                anchors.horizontalCenter: parent.horizontalCenter
+                                                horizontalAlignment: Text.AlignHCenter
+                                                wrapMode: Text.WordWrap
+                                                maximumLineCount: 2
+                                                elide: Text.ElideRight
                                             }
                                         }
                                         MouseArea {
@@ -451,10 +470,10 @@ PluginComponent {
                                         ]
                                         delegate: Item {
                                             width: (parent.width - (Theme.spacingXS * 3)) / 4
-                                            height: 25
+                                            height: 28
                                             Column {
                                                 anchors.fill: parent
-                                                spacing: 6
+                                                spacing: 4
                                                 Rectangle {
                                                     width: parent.width - 4
                                                     height: 3
@@ -463,11 +482,13 @@ PluginComponent {
                                                     anchors.horizontalCenter: parent.horizontalCenter
                                                 }
                                                 StyledText {
+                                                    width: parent.width
                                                     text: modelData.name
                                                     color: root.ancSubMode === modelData.id ? Theme.primary : Theme.surfaceVariantText
                                                     font.pixelSize: Theme.fontSizeSmall
                                                     font.weight: root.ancSubMode === modelData.id ? Font.Bold : Font.Normal
-                                                    anchors.horizontalCenter: parent.horizontalCenter
+                                                    horizontalAlignment: Text.AlignHCenter
+                                                    elide: Text.ElideRight
                                                 }
                                             }
                                             MouseArea {

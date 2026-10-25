@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import qs.Common
 import qs.Widgets
+import qs.DCommon.Widgets
 
 /*
  * EqualizerPage.qml
@@ -33,7 +34,7 @@ Item {
             onPressed: window.startSystemMove()
         }
 
-        DankIcon {
+        DIcon {
             id: backIconEq
             name: "arrow_back"
             color: Theme.surfaceText

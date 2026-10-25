@@ -1,6 +1,7 @@
 import QtQuick
 import qs.Common
 import qs.Widgets
+import qs.DCommon.Widgets
 
 /*
  * FindMyPage.qml
@@ -30,7 +31,7 @@ Item {
             onPressed: window.startSystemMove()
         }
 
-        DankIcon {
+        DIcon {
             id: backIconFm
             name: "arrow_back"
             color: Theme.surfaceText
@@ -97,7 +98,7 @@ Item {
                         radius: 24
                         color: parent.isRinging ? Theme.surfaceContainerHighest : "#d93025"
                         anchors.horizontalCenter: parent.horizontalCenter
-                        DankIcon {
+                        DIcon {
                             name: parent.isRinging ? "stop" : "play_arrow"
                             color: parent.isRinging ? Theme.surfaceText : "white"
                             anchors.centerIn: parent
@@ -133,7 +134,7 @@ Item {
                         radius: 24
                         color: parent.isRinging ? Theme.surfaceContainerHighest : "#d93025"
                         anchors.horizontalCenter: parent.horizontalCenter
-                        DankIcon {
+                        DIcon {
                             name: parent.isRinging ? "stop" : "play_arrow"
                             color: parent.isRinging ? Theme.surfaceText : "white"
                             anchors.centerIn: parent

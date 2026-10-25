@@ -1,6 +1,7 @@
 import QtQuick
 import qs.Common
 import qs.Widgets
+import qs.DCommon.Widgets
 import "../components"
 
 /*
@@ -35,7 +36,7 @@ Item {
             onPressed: window.startSystemMove()
         }
 
-        DankIcon {
+        DIcon {
             id: backIconDc
             name: "arrow_back"
             color: Theme.surfaceText
@@ -94,7 +95,7 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                         width: parent.width - 40
                     }
-                    DankIcon {
+                    DIcon {
                         name: (controller && controller.dualConnectionEnabled) ? "toggle_on" : "toggle_off"
                         color: (controller && controller.dualConnectionEnabled) ? Theme.primary : Theme.surfaceVariantText
                         size: 28
@@ -173,7 +174,7 @@ Item {
                                             font.pixelSize: Theme.fontSizeSmall
                                         }
                                     }
-                                    DankIcon {
+                                    DIcon {
                                         name: modelData.status === 'Active' ? "check_box" : "check_box_outline_blank"
                                         color: modelData.status === 'Active' ? Theme.surfaceText : Theme.surfaceVariantText
                                         size: 24

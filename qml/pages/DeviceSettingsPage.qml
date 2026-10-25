@@ -1,6 +1,7 @@
 import QtQuick
 import qs.Common
 import qs.Widgets
+import qs.DCommon.Widgets
 import "../components"
 
 /*
@@ -31,7 +32,7 @@ Item {
             onPressed: window.startSystemMove()
         }
 
-        DankIcon {
+        DIcon {
             id: backIconDs
             name: "arrow_back"
             color: Theme.surfaceText
@@ -82,7 +83,7 @@ Item {
                 anchors.fill: parent
                 anchors.margins: Theme.spacingM
                 spacing: Theme.spacingM
-                DankIcon { name: "high_quality"; color: Theme.surfaceText; anchors.verticalCenter: parent.verticalCenter; size: 24 }
+                DIcon { name: "high_quality"; color: Theme.surfaceText; anchors.verticalCenter: parent.verticalCenter; size: 24 }
                 StyledText {
                     text: "Lossless codec (LDAC)"
                     color: Theme.surfaceText
@@ -91,7 +92,7 @@ Item {
                     anchors.verticalCenter: parent.verticalCenter
                     width: parent.width - 90
                 }
-                DankIcon {
+                DIcon {
                     name: (window.ldacEnabled || (controller && controller.ldacEnabled)) ? "toggle_on" : "toggle_off"
                     color: (window.ldacEnabled || (controller && controller.ldacEnabled)) ? Theme.primary : Theme.surfaceVariantText
                     size: 28
@@ -126,7 +127,7 @@ Item {
                 anchors.fill: parent
                 anchors.margins: Theme.spacingM
                 spacing: Theme.spacingM
-                DankIcon { name: "sensors"; color: Theme.surfaceText; anchors.verticalCenter: parent.verticalCenter; size: 24 }
+                DIcon { name: "sensors"; color: Theme.surfaceText; anchors.verticalCenter: parent.verticalCenter; size: 24 }
                 StyledText {
                     text: "In-ear detection"
                     color: Theme.surfaceText
@@ -135,7 +136,7 @@ Item {
                     anchors.verticalCenter: parent.verticalCenter
                     width: parent.width - 90
                 }
-                DankIcon {
+                DIcon {
                     name: (controller && controller.inEarDetection) ? "toggle_on" : "toggle_off"
                     color: (controller && controller.inEarDetection) ? Theme.primary : Theme.surfaceVariantText
                     size: 28
@@ -165,7 +166,7 @@ Item {
                 anchors.fill: parent
                 anchors.margins: Theme.spacingM
                 spacing: Theme.spacingM
-                DankIcon { name: "location_on"; color: Theme.surfaceText; anchors.verticalCenter: parent.verticalCenter; size: 24 }
+                DIcon { name: "location_on"; color: Theme.surfaceText; anchors.verticalCenter: parent.verticalCenter; size: 24 }
                 StyledText {
                     text: "Find my earbuds"
                     color: Theme.surfaceText
@@ -174,7 +175,7 @@ Item {
                     anchors.verticalCenter: parent.verticalCenter
                     width: parent.width - 90
                 }
-                DankIcon {
+                DIcon {
                     name: "chevron_right"
                     color: Theme.surfaceVariantText
                     size: 28

@@ -1,6 +1,7 @@
 import QtQuick
 import qs.Common
 import qs.Widgets
+import qs.DCommon.Widgets
 import "../components"
 
 /*
@@ -43,7 +44,7 @@ Item {
             anchors.left: parent.left
         }
 
-        DankIcon {
+        DIcon {
             name: "close"
             size: 24
             color: Theme.surfaceText
@@ -177,11 +178,13 @@ Item {
 
                         // ANC
                         Column {
+                            width: 90
                             spacing: Theme.spacingS
                             Rectangle {
                                 width: 60; height: 60; radius: 30
+                                anchors.horizontalCenter: parent.horizontalCenter
                                 color: controller.currentMode === "anc" ? Theme.primary : Theme.surfaceContainerHigh
-                                DankIcon { name: "noise_control_on"; size: Theme.iconSizeLarge; color: controller.currentMode === "anc" ? Theme.surface : Theme.surfaceText; anchors.centerIn: parent }
+                                DIcon { name: "noise_control_on"; size: Theme.iconSizeLarge; color: controller.currentMode === "anc" ? Theme.surface : Theme.surfaceText; anchors.centerIn: parent }
                                 MouseArea {
                                     anchors.fill: parent; cursorShape: Qt.PointingHandCursor
                                     onClicked: {
@@ -190,16 +193,27 @@ Item {
                                     }
                                 }
                             }
-                            StyledText { text: "Noise cancel"; color: Theme.surfaceVariantText; font.pixelSize: Theme.fontSizeSmall; anchors.horizontalCenter: parent.horizontalCenter }
+                            StyledText {
+                                width: parent.width
+                                text: "Noise Cancel"
+                                color: Theme.surfaceVariantText
+                                font.pixelSize: Theme.fontSizeSmall
+                                horizontalAlignment: Text.AlignHCenter
+                                wrapMode: Text.WordWrap
+                                maximumLineCount: 2
+                                elide: Text.ElideRight
+                            }
                         }
 
                         // Transparency
                         Column {
+                            width: 90
                             spacing: Theme.spacingS
                             Rectangle {
                                 width: 60; height: 60; radius: 30
+                                anchors.horizontalCenter: parent.horizontalCenter
                                 color: controller.currentMode === "transparency" ? Theme.primary : Theme.surfaceContainerHigh
-                                DankIcon { name: "hearing"; size: Theme.iconSizeLarge; color: controller.currentMode === "transparency" ? Theme.surface : Theme.surfaceText; anchors.centerIn: parent }
+                                DIcon { name: "hearing"; size: Theme.iconSizeLarge; color: controller.currentMode === "transparency" ? Theme.surface : Theme.surfaceText; anchors.centerIn: parent }
                                 MouseArea {
                                     anchors.fill: parent; cursorShape: Qt.PointingHandCursor
                                     onClicked: {
@@ -208,16 +222,27 @@ Item {
                                     }
                                 }
                             }
-                            StyledText { text: "Transparency"; color: Theme.surfaceVariantText; font.pixelSize: Theme.fontSizeSmall; anchors.horizontalCenter: parent.horizontalCenter }
+                            StyledText {
+                                width: parent.width
+                                text: "Transparency"
+                                color: Theme.surfaceVariantText
+                                font.pixelSize: Theme.fontSizeSmall
+                                horizontalAlignment: Text.AlignHCenter
+                                wrapMode: Text.WordWrap
+                                maximumLineCount: 2
+                                elide: Text.ElideRight
+                            }
                         }
 
                         // Off
                         Column {
+                            width: 90
                             spacing: Theme.spacingS
                             Rectangle {
                                 width: 60; height: 60; radius: 30
+                                anchors.horizontalCenter: parent.horizontalCenter
                                 color: controller.currentMode === "off" ? Theme.primary : Theme.surfaceContainerHigh
-                                DankIcon { name: "noise_control_off"; size: Theme.iconSizeLarge; color: controller.currentMode === "off" ? Theme.surface : Theme.surfaceText; anchors.centerIn: parent }
+                                DIcon { name: "noise_control_off"; size: Theme.iconSizeLarge; color: controller.currentMode === "off" ? Theme.surface : Theme.surfaceText; anchors.centerIn: parent }
                                 MouseArea {
                                     anchors.fill: parent; cursorShape: Qt.PointingHandCursor
                                     onClicked: {
@@ -226,7 +251,16 @@ Item {
                                     }
                                 }
                             }
-                            StyledText { text: "Off"; color: Theme.surfaceVariantText; font.pixelSize: Theme.fontSizeSmall; anchors.horizontalCenter: parent.horizontalCenter }
+                            StyledText {
+                                width: parent.width
+                                text: "Off"
+                                color: Theme.surfaceVariantText
+                                font.pixelSize: Theme.fontSizeSmall
+                                horizontalAlignment: Text.AlignHCenter
+                                wrapMode: Text.WordWrap
+                                maximumLineCount: 2
+                                elide: Text.ElideRight
+                            }
                         }
                     }
 
@@ -322,7 +356,7 @@ Item {
                     }
 
                     // Toggle Button
-                    DankIcon {
+                    DIcon {
                         anchors.right: parent.right
                         anchors.bottom: parent.bottom
                         anchors.margins: Theme.spacingS
