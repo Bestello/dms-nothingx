@@ -2,7 +2,7 @@
   "id": "dmsNothingX",
   "name": "DMS Nothing X",
   "description": "Control ANC, EQ, and settings for Nothing & CMF audio devices",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "author": "Arif <Bestello>",
   "icon": "earbuds_2",
   "type": "widget",
