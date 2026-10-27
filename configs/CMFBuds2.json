@@ -4,9 +4,9 @@
   "capabilities": {
     "anc": true,
     "custom_eq": true,
-    "spatial_audio": false,
+    "spatial_audio": true,
     "low_latency": true,
-    "in_ear_detection": false,
+    "in_ear_detection": true,
     "ultra_bass": true,
     "ldac": false,
     "dual_connection": true,

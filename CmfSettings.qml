@@ -23,6 +23,8 @@ PluginSettings {
         options: [
             { label: "CMF Buds Pro 2", value: "CMF_Buds_Pro_2" },
             { label: "CMF Buds Pro", value: "CMF_Buds_Pro" },
+            { label: "CMF Buds 2", value: "CMF_Buds_2" },
+            { label: "CMF Buds 2a", value: "CMF_Buds_2a" },
             { label: "CMF Buds", value: "CMF_Buds" },
             { label: "Nothing Ear", value: "Ear" },
             { label: "Nothing Ear (a)", value: "Ear_a" },
@@ -44,6 +46,18 @@ PluginSettings {
                 return [
                     { label: "Black", value: "black" },
                     { label: "White", value: "white" },
+                    { label: "Orange", value: "orange" }
+                ]
+            } else if (deviceNameSetting.value === "CMF_Buds_2") {
+                return [
+                    { label: "Black", value: "black" },
+                    { label: "Green", value: "green" },
+                    { label: "Orange", value: "orange" }
+                ]
+            } else if (deviceNameSetting.value === "CMF_Buds_2a") {
+                return [
+                    { label: "Black", value: "black" },
+                    { label: "Light Grey", value: "light_grey" },
                     { label: "Orange", value: "orange" }
                 ]
             } else if (deviceNameSetting.value === "Ear_a") {

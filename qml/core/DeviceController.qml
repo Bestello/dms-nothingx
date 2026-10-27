@@ -43,6 +43,8 @@ Item {
         var names = {
             "CMF_Buds_Pro_2": "CMF Buds Pro 2",
             "CMF_Buds_Pro": "CMF Buds Pro",
+            "CMF_Buds_2": "CMF Buds 2",
+            "CMF_Buds_2a": "CMF Buds 2a",
             "CMF_Buds": "CMF Buds",
             "Ear": "Nothing Ear",
             "Ear_a": "Nothing Ear (a)",
@@ -63,6 +65,8 @@ Item {
         var validColors = {
             "CMF_Buds_Pro_2": ["black", "white", "blue", "orange"],
             "CMF_Buds_Pro": ["black", "white", "orange"],
+            "CMF_Buds_2": ["black", "green", "orange"],
+            "CMF_Buds_2a": ["black", "light_grey", "orange"],
             "CMF_Buds": ["black", "white", "orange"],
             "Ear": ["black", "white"],
             "Ear_a": ["black", "white", "yellow"],
@@ -238,6 +242,8 @@ Item {
             var configMap = {
                 "CMF_Buds_Pro_2": "CMFBudsPro2",
                 "CMF_Buds_Pro": "BudsPro",
+                "CMF_Buds_2": "CMFBuds2",
+                "CMF_Buds_2a": "CMFBuds2A",
                 "CMF_Buds": "CMFBuds",
                 "Ear": "NothingEar",
                 "Ear_a": "NothingEarA",
